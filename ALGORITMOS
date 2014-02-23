@@ -1,0 +1,271 @@
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package algoritmos;
+
+import java.util.Scanner;
+
+/**
+ *
+ * @author Victor
+ */
+public class Algoritmos<T> {
+
+    private Nodo<T> p = null;
+    Scanner teclado = new Scanner(System.in);
+
+    public void Crea_inicio(T info) {
+        int res;
+        p = new Nodo<>();
+        p.setInfo(info);
+        p.setLiga(null);
+        System.out.println("¿Desea ingresar mas nodos a la lista? Si:1, No:0");
+        res = teclado.nextInt();
+
+        while (res == 1) {
+            Nodo<T> Q = new Nodo<>();
+            Q.setInfo(info);
+            Q.setLiga(p);
+            p = Q;
+            System.out.println("¿Desea ingresar mas nodos a la lista? Si:1, No:0");
+            res = teclado.nextInt();
+        }
+    }
+
+    public void Crea_final(T info) {
+        int res = 1;
+
+        p = new Nodo<>();
+        p.setInfo(info);
+        p.setLiga(null);
+        Nodo<T> t = p;
+
+        System.out.println("¿Desea ingresar mas nodos a la lista? Si:1, No:0");
+        res = teclado.nextInt();
+
+        while (res == 1) {
+            Nodo<T> Q = new Nodo<>();
+            Q.setInfo(info);
+            Q.setLiga(null);
+            t.setLiga(Q);
+            t = Q;
+            System.out.println("¿Desea ingresar mas nodos a la lista? Si:1, No:0");
+            res = teclado.nextInt();
+        }
+    }
+
+    public void Recorre_iterativo() {
+        p = new Nodo<>();
+        Nodo<T> Q = new Nodo<>();
+        Q = p;
+        while (Q != null) {
+            System.out.println(Q.getInfo());
+            Q = Q.getLiga();
+        }
+    }
+
+    public void Recorre_recursivo(Nodo<T> p) {
+
+        p = new Nodo<>();
+
+        if (p != null) {
+            System.out.println(p.getInfo());
+            Recorre_recursivo(p.getLiga());
+        }
+
+    }
+
+    public void Inserta_Inicio(Nodo<T> p, int dato) {
+        Nodo Q = new Nodo<>();
+        Q.setInfo(dato);
+        Q.setLiga(p);
+        p = Q;
+    }
+
+    public void Inserta_final(Nodo<T> p, int dato) {
+
+        Nodo<T> t = p;
+
+        while (t.getLiga() != null) {
+            t = t.getLiga();
+        }
+        Nodo<T> Q = new Nodo<>();
+        Q.setInfo(dato);
+        Q.setLiga(null);
+        t.setLiga(Q);
+    }
+
+    public void Inserta_antes_X(Nodo<T> p, T dato) {
+
+        Nodo<T> Q = new Nodo<>();
+        Q = p;
+        int Band = 1;
+        Nodo<T> t = new Nodo<>();
+
+        while (Q.getInfo() != dato && Band == 1) {
+            if (Q.getLiga() != null) {
+                t = Q;
+                Q = Q.getLiga();
+            } else {
+                Band = 0;
+            }
+            if (Band == 1) {
+                Nodo<T> X = new Nodo<>();
+                X.setInfo(dato);
+                if (p == Q) {
+                    X.setLiga(p);
+                    p = X;
+                } else {
+                    t.setLiga(X);
+                    X.setLiga(Q);
+                }
+            } else {
+                System.out.println("El nodo dado como referencia no se encuentra en la lista");
+            }
+        }
+    }
+
+    public void Inserta_depues_X(Nodo<T> p, int tecl, T busc) {
+
+        Nodo<T> Q = new Nodo<>();
+        Q = p;
+        int Band = 1;
+
+        while (Q.getInfo() != busc && Band == 1) {
+            if (Q.getLiga() != null) {
+                Q = Q.getLiga();
+            } else {
+                Band = 0;
+            }
+        }
+        if (Band == 1) {
+            Nodo<T> t = new Nodo<>();
+            t.setInfo(tecl);
+            t.setLiga(Q.getLiga());
+            Q.setLiga(t);
+        } else {
+            System.out.println("El nodo dado como referencia no se encuentra en la lista");
+        }
+    }
+
+    public void eliminar_inicio(Nodo<T> p) {
+        Nodo<T> Q = p;
+        p = Q.getLiga();
+        Q = null;
+    }
+
+    public void Elimina_ultimo() {
+        Nodo<T> Q = p;
+        Nodo<T> t = new Nodo<>();
+
+        if (p.getLiga() == null) {
+            p = null;
+        } else {
+            while (Q.getLiga() != null) {
+                t = Q;
+                Q = Q.getLiga();
+            }
+            t.setLiga(null);
+        }
+        Q = null;
+    }
+
+    public void elimina_x(Nodo<T> p, T x) {
+        Nodo<T> Q = p;
+        Nodo<T> t = new Nodo<>();
+        int Band = 1;
+
+        while (Q.getInfo() != x && Band == 1) {
+            if (Q.getLiga() != null) {
+                t = Q;
+                Q = Q.getLiga();
+            } else {
+                Band = 0;
+            }
+            if (Band == 0) {
+                System.out.println("El elemenco con " + x + "no se encontro en la lista");
+            } else {
+                if (p.equals(Q)) {
+                    p = Q.getLiga();
+                } else {
+                    t.setLiga(Q.getLiga());
+                }
+                Q = null;
+            }
+        }
+
+    }
+
+    public void Elimina_antes_X(Nodo p, T x) {
+
+        Nodo<T> Q = new Nodo<>();
+        Nodo<T> t = new Nodo<>();
+        Nodo<T> R = new Nodo<>();
+        int Band = 0;
+
+        if (p.getInfo() == x) {
+            System.out.println("No existe un nodo que preceda al que contiene a X");
+        } else {
+            Q = p;
+            t = p;
+            Band = 1;
+            while (Q.getInfo() != x && Band == 1) {
+                if (Q.getLiga() != null) {
+                    R = t;
+                    t = Q;
+                    Q = Q.getLiga();
+                } else {
+                    Band = 0;
+                }
+            }
+            if (Band == 0) {
+                System.out.println("El elemento no se encuentra en la lista");
+            } else {
+                if (p.getLiga() == Q) {
+                    p = Q;
+                } else {
+                    R.setLiga(Q);
+                }
+                t = null;
+            }
+        }
+    }
+
+    public void Busqueda_desordenada(Nodo<T> p, T x) {
+        Nodo<T> Q = p;
+        while (Q != null && Q.getInfo() != x) {
+            Q = Q.getLiga();
+        }
+        if (Q == null) {
+            System.out.println("El elemento no se encuentra en la lista");
+        } else {
+            System.out.println("El elemento se encuentra en la lista");
+        }
+    }
+
+    public void Busqueda_ordenada(Nodo<T> p, int x) {
+        Nodo<T> Q = p;
+        while ((Q != null) && (Q.getInfo()) < x) {
+            Q = Q.getLiga();
+        }
+        if ((Q == null) || (Q.getInfo() > x)) {
+            System.out.println("El elemento no se encuentra en la lista");
+        } else {
+            System.out.println("El elemento se encuentra en la lista");
+        }
+    }
+
+    public void Busqueda_recursiva(Nodo<T> p, T x) {
+        if (p != null) {
+            if (p.getInfo() == x) {
+                System.out.println("El elemento se encuentra en la lista");
+            } else {
+                Busqueda_recursiva(p.getLiga(), x);
+            }
+        } else {
+            System.out.println("El elemento no se encuentra en la lista");
+        }
+    }
+}
